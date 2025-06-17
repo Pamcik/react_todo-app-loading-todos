@@ -4,6 +4,7 @@ interface Props {
   activeCount: number;
   completedCount: number;
   currentFilter: 'all' | 'active' | 'completed';
+  onClearCompleted: () => void | Promise<void>;
 }
 
 const TodoFooter: React.FC<Props> = ({

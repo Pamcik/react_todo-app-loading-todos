@@ -66,6 +66,22 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
+  const handleClearCompleted = async () => {
+    const completedTodos = todos.filter(t => t.completed);
+
+    for (const todo of completedTodos) {
+      setLoadingTodoIds(ids => [...ids, todo.id]);
+      try {
+        await deleteTodo(todo.id);
+        setTodos(current => current.filter(t => t.id !== todo.id));
+      } catch {
+        setErrorMessage('Unable to delete a todo');
+      } finally {
+        setLoadingTodoIds(ids => ids.filter(id => id !== todo.id));
+      }
+    }
+  };
+
   const handleAdd = async (e: FormEvent) => {
     e.preventDefault();
     const title = newTitle.trim();
@@ -152,6 +168,7 @@ export const App: React.FC = () => {
             activeCount={activeCount}
             completedCount={completedCount}
             currentFilter={filter}
+            onClearCompleted={handleClearCompleted}
           />
         )}
 
