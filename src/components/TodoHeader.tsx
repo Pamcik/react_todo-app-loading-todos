@@ -1,41 +1,46 @@
-import React, { FormEvent } from 'react';
-import { Todo } from '../types/Todo';
+import React, { useState, FormEvent } from 'react';
 
 interface Props {
-  todos: Todo[];
-  newTitle: string;
   isLoading: boolean;
-  onTitleChange: (title: string) => void;
-  onAdd: (e: FormEvent) => void;
+  onAdd: (title: string) => void;
 }
 
-const TodoHeader: React.FC<Props> = ({
-  todos,
-  newTitle,
-  isLoading,
-  onTitleChange,
-  onAdd,
-}) => {
-  const allCompleted = todos.length > 0 && todos.every(t => t.completed);
+const TodoHeader: React.FC<Props> = ({ isLoading, onAdd }) => {
+  const [newTitle, setNewTitle] = useState<string>('');
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const title = newTitle.trim();
+
+    if (!title) {
+      return;
+    }
+
+    onAdd(title);
+    setNewTitle('');
+  };
 
   return (
-    <header className="todoapp__header">
-      <button
-        type="button"
-        className={`todoapp__toggle-all${allCompleted ? ' active' : ''}`}
-        data-cy="ToggleAllButton"
-        disabled={todos.length === 0 || isLoading}
-      />
-      <form onSubmit={onAdd}>
+    <header className="todoapp__header" data-cy="Header">
+      <h1 className="todoapp__title">todos</h1>
+      <form onSubmit={handleSubmit}>
         <input
-          data-cy="NewTodoField"
-          type="text"
-          className="todoapp__new-todo"
+          className="new-todo"
           placeholder="What needs to be done?"
           value={newTitle}
-          onChange={e => onTitleChange(e.target.value)}
+          onChange={e => setNewTitle(e.target.value)}
           disabled={isLoading}
+          autoFocus
+          data-cy="NewTodoField"
         />
+        <button
+          type="submit"
+          disabled={isLoading || newTitle.trim() === ''}
+          className="add-button"
+          data-cy="AddTodoButton"
+        >
+          Add
+        </button>
       </form>
     </header>
   );

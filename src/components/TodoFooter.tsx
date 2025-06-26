@@ -3,36 +3,53 @@ import React from 'react';
 interface Props {
   activeCount: number;
   completedCount: number;
-  currentFilter: 'all' | 'active' | 'completed';
+  currentFilter: FilterKey;
+  onFilterChange: (key: FilterKey) => void;
   onClearCompleted: () => void | Promise<void>;
 }
+
+// Lista filtrów z etykietami
+const FILTERS = [
+  { key: 'all', label: 'All' },
+  { key: 'active', label: 'Active' },
+  { key: 'completed', label: 'Completed' },
+] as const;
+
+type FilterKey = (typeof FILTERS)[number]['key'];
+type FilterItem = (typeof FILTERS)[number];
 
 const TodoFooter: React.FC<Props> = ({
   activeCount,
   completedCount,
   currentFilter,
+  onFilterChange,
+  onClearCompleted,
 }) => (
   <footer className="todoapp__footer" data-cy="Footer">
     <span className="todo-count" data-cy="TodosCounter">
       {activeCount} items left
     </span>
+
     <nav className="filter" data-cy="Filter">
-      {(['all', 'active', 'completed'] as const).map(f => (
+      {FILTERS.map(({ key, label }: FilterItem) => (
         <a
-          key={f}
-          href={`#/${f === 'all' ? '' : f}`}
-          className={`filter__link${currentFilter === f ? ' selected' : ''}`}
-          data-cy={`FilterLink${f.charAt(0).toUpperCase() + f.slice(1)}`}
+          key={key}
+          href={`#/${key === 'all' ? '' : key}`}
+          className={`filter__link${currentFilter === key ? ' selected' : ''}`}
+          data-cy={`FilterLink${label}`}
+          onClick={() => onFilterChange(key)}
         >
-          {f.charAt(0).toUpperCase() + f.slice(1)}
+          {label}
         </a>
       ))}
     </nav>
+
     <button
       type="button"
       className="todoapp__clear-completed"
       data-cy="ClearCompletedButton"
       disabled={completedCount === 0}
+      onClick={onClearCompleted}
     >
       Clear completed
     </button>
