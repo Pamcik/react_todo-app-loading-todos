@@ -1,4 +1,5 @@
 import React, { useState, FormEvent } from 'react';
+import '../styles/index.scss';
 
 interface Props {
   isLoading: boolean;
@@ -25,7 +26,7 @@ const TodoHeader: React.FC<Props> = ({ isLoading, onAdd }) => {
       <h1 className="todoapp__title">todos</h1>
       <form onSubmit={handleSubmit}>
         <input
-          className="new-todo"
+          className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={newTitle}
           onChange={e => setNewTitle(e.target.value)}
@@ -36,11 +37,9 @@ const TodoHeader: React.FC<Props> = ({ isLoading, onAdd }) => {
         <button
           type="submit"
           disabled={isLoading || newTitle.trim() === ''}
-          className="add-button"
+          className="todoapp__add-button"
           data-cy="AddTodoButton"
-        >
-          Add
-        </button>
+        ></button>
       </form>
     </header>
   );

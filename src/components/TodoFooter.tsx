@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/index.scss';
 
 interface Props {
   activeCount: number;
@@ -8,7 +9,6 @@ interface Props {
   onClearCompleted: () => void | Promise<void>;
 }
 
-// Lista filtrów z etykietami
 const FILTERS = [
   { key: 'all', label: 'All' },
   { key: 'active', label: 'Active' },

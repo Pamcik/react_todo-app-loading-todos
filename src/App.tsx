@@ -5,13 +5,13 @@ import { Todo } from './types/Todo';
 import TodoHeader from './components/TodoHeader';
 import TodoList from './components/TodoList';
 import TodoFooter from './components/TodoFooter';
+import { USER_ID } from './api/todos';
 import { UserWarning } from './UserWarning';
 import ErrorNotification from './components/ErrorNotification';
 
 import './styles/index.scss';
 import './styles/todoapp.scss';
 
-// Typ filtra i jego mapa
 export type FilterKey = 'all' | 'active' | 'completed';
 const FILTER_MAP: Record<FilterKey, (todo: Todo) => boolean> = {
   all: () => true,
@@ -73,10 +73,13 @@ export const App: React.FC = () => {
     /* ... */
   };
 
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
+
   return (
     <div className="todoapp">
       <TodoHeader isLoading={isLoading} onAdd={handleAdd} />
-      <UserWarning />
 
       {isLoading && <div className="loading">Loading...</div>}
 

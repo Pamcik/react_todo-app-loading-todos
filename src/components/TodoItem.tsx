@@ -1,5 +1,6 @@
 import React from 'react';
 import { Todo } from '../types/Todo';
+import '../styles/index.scss';
 
 interface Props {
   todo: Todo;
